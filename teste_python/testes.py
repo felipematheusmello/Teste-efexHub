@@ -1,4 +1,5 @@
 import random
+
 def verify_prime_number(number):
     division = number % 1
     if number >= 0 and division == 1 or division == 0:
