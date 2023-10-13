@@ -1,10 +1,12 @@
 import './App.css';
+import Register from './components/auth/register/register';
+import AppContainer from './components/container/container';
 
 function App() {
   return (
-    <div className="App">
-      
-    </div>
+    <AppContainer>
+      <Register></Register>
+    </AppContainer>
   );
 }
 
