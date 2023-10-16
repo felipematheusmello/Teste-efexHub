@@ -7,6 +7,7 @@ import SimpleCustomButton from '../../../components/custom-button/custom-button'
 import { useNavigate } from 'react-router-dom';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import {login} from '../../../redux/actions/auth-action'
+import { ToastContainer } from 'react-toastify';
 
 
 function Login() {
@@ -19,7 +20,6 @@ function Login() {
         },
         shouldUseNativeValidation: true
     })
-    const [isValid, setIsValid] = useState(true);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -50,13 +50,16 @@ function Login() {
     useEffect(() => {
         const token = localStorage.getItem('access_token')
         if (token) {
-            navigate('/')
+            navigate('/');
         }
     })
 
 
     return (
     <>
+        <div>
+            <ToastContainer />
+        </div>
             <LoginContainer>
                     <form noValidate>
                         <Box sx={{ display: 'flex', flexFlow: 'column wrap'}}>
@@ -87,7 +90,7 @@ function Login() {
                                     label="Password"
                                     />
                             </FormControl>
-                            <SimpleCustomButton onClickButton={handleSubmit} callback={onSubmit} isVisible={isValid}>Login</SimpleCustomButton>
+                            <SimpleCustomButton onClickButton={handleSubmit} callback={onSubmit} isVisible={true}>Login</SimpleCustomButton>
                         </Box>
                     </form>
             <LineSeparator />

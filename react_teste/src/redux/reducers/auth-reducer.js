@@ -1,4 +1,4 @@
-import { LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT } from "../actions/action-type";
+import { LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT, REGISTER, REGISTER_FAILURE } from "../actions/action-type";
 
 const initialState = {
     isAuthenticated: false,
@@ -34,7 +34,13 @@ const initialState = {
           user: null,
           error: null,
         };
-
+      case REGISTER:
+        return {
+          ...state,
+          error: null,
+        }
+      case REGISTER_FAILURE:
+        return {...state, error: action.error}
       default:
         return state;
     }

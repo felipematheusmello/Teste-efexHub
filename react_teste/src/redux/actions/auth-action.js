@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT } from './action-type';
+import { LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT, REGISTER, REGISTER_FAILURE } from './action-type';
+import { toast } from 'react-toastify';
 
 
 const baseUri = 'http://127.0.0.1:5000/'
@@ -17,7 +18,7 @@ export const login = (userData) => {
 
       })
       .catch((error) => {
-        console.log(error)
+        toast.error(error.response.data.error)
         dispatch({ type: LOGIN_FAILURE, error: error.message });
       });
   };
@@ -34,6 +35,18 @@ export const refreshAndCheckAuthToken = () => {
       localStorage.clear()
     })
 
+  }
+}
+
+export const registerAccount = (taskData) => {
+  return (dispatch) => {
+    axios.post(`${baseUri}register`, taskData)
+    .then(() => {
+      dispatch({ type: REGISTER})
+    } ).catch((error) => {
+      toast.error('An error occurred while registering')
+      dispatch({ type: REGISTER_FAILURE, error: error.message })
+    })
   }
 }
 

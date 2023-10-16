@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { RegisterContainer } from './register_styles';
 import SimpleCustomButton from '../../../components/custom-button/custom-button';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { registerAccount } from '../../../redux/actions/auth-action';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Register() {
     const [showPassword, setShowPassword] = useState(false);
-    const { register, handleSubmit, getValues,  } = useForm({
+    const [registerAccountState, setRegisterAccountState] = useState(false)
+    const { register, handleSubmit, getValues } = useForm({
         defaultValues: {
             username: '',
             password: '',
@@ -17,31 +21,38 @@ function Register() {
         },
         shouldUseNativeValidation: true,
     })
-    const [isValid, setIsValid] = useState(true);
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const {error} = useSelector(state => state.auth);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
       };
 
     const onSubmit = (data) => {
-        console.log('teste');
-        console.log(data);
-        setIsValid(!isValid)
-        return
+        dispatch(registerAccount({username: data.username, password: data.password}))
+        setRegisterAccountState(true);
     }
-
-
 
     useEffect(() => {
         const token = localStorage.getItem('access_token')
         if (token) {
             navigate('/home')
         }
-    })
+    }, [registerAccount]);
+
+    useEffect(() => {
+        console.log(registerAccountState, error)
+        if (!error && registerAccountState) {
+            navigate('/login')
+        }
+    }, [registerAccountState, dispatch ])
     return (
     <>
+        <div>
+            <ToastContainer />
+        </div>
         <RegisterContainer>
             <form noValidate>
 
@@ -95,7 +106,7 @@ function Register() {
 
                             />
                     </FormControl>
-                        <SimpleCustomButton onClickButton={handleSubmit} callback={onSubmit} isVisible={isValid}>Register</SimpleCustomButton>
+                        <SimpleCustomButton onClickButton={handleSubmit} callback={onSubmit} isVisible={true}>Register</SimpleCustomButton>
                 </Box>
             </form>
         </RegisterContainer>
