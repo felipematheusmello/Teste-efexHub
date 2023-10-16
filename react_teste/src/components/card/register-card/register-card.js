@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from "react";
 import {
+    Button,
     Dialog,
     DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle,
+    FormControlLabel,
     FormLabel,
+    InputAdornment,
+    Radio,
+    RadioGroup,
     TextField,
     Typography,
 } from "@mui/material"
 import { Controller, useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
 
-function RegisterTaskDialog({openDialog, onHandleClose = () => {} }) {
+function RegisterTaskDialog({openDialog, onHandleClose = () => {}, onSubmit = () => {} }) {
     const [open, setOpen] = useState(false)
-    const dispatch = useDispatch()
     const {register, handleSubmit, control} = useForm({
         defaultValues: {
             name: '',
@@ -22,22 +25,18 @@ function RegisterTaskDialog({openDialog, onHandleClose = () => {} }) {
             status: false,
         }
       })
-    const createTask = () => {
-        
-    }
 
     useEffect(() => {
         setOpen(openDialog)
-    }, [])
+    }, [openDialog])
 
     return (
         <div>
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Subscribe</DialogTitle>
+        <Dialog open={open} onClose={onHandleClose}>
+          <DialogTitle>Create Task</DialogTitle>
           <DialogContent>
-            <DialogContentText>
-              To subscribe to this website, please enter your email address here. We
-              will send updates occasionally.
+            <DialogContentText sx={{ mb: 2 }}>
+              To create a task, please insert the required fields below
             </DialogContentText>
             <Typography sx={{ mb: 2.3 }} variant="h5" component="div">
                 <TextField
@@ -72,7 +71,7 @@ function RegisterTaskDialog({openDialog, onHandleClose = () => {} }) {
             <Controller
                 name="status"
                 control={control}
-                defaultValue={status}
+                defaultValue={false}
                 render={({ field }) => (
                     <RadioGroup
                     row
@@ -89,12 +88,9 @@ function RegisterTaskDialog({openDialog, onHandleClose = () => {} }) {
             </Typography>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={() => {
-                onHandleClose()
-                handleSubmit(onHandleClose)}
-            }
-            >Subscribe</Button>
+            <Button onClick={onHandleClose}>Cancel</Button>
+            <Button onClick={handleSubmit(onSubmit)}
+            >Create</Button>
           </DialogActions>
         </Dialog>
       </div>

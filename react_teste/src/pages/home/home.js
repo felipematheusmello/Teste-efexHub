@@ -2,13 +2,16 @@ import React, { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { listTasks } from "../../redux/actions/task-action";
+import { listTasks, createTask, deleteTask } from "../../redux/actions/task-action";
 import BasicCard from "../../components/card/card";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import EditCard from "../../components/card/edit-card/edit-card";
 import { ButtonEndContainer } from "./home-style";
 import { Typography } from "@mui/material";
+import RegisterTaskDialog from "../../components/card/register-card/register-card";
 
+
+const fakeData = [{ id: 2, name: "Meu teste", description: "test", status:"false"}]
 function Home() {
     const [isEditing, setIsEditing] = useState(false)
     const [openCreateTask, setOpenCreateTask] = useState(false)
@@ -24,9 +27,19 @@ function Home() {
         setIsEditing(false)
     }
 
-    const openCreateTaskDialog = () => {
+    const ondDeleteTask = (id) => {
+        console.log('teste')
+        deleteTask(id)
+    }
+
+    const onOpenCloseCreateTaskDialog = () => {
         console.log('open')
-        setOpenCreateTask(true)
+        setOpenCreateTask(!openCreateTask)
+    }
+
+    const onCreateTask = (event) => {
+        console.log(event)
+        dispatch(createTask(event))
     }
 
     const onEditTask = (task) => {
@@ -37,17 +50,34 @@ function Home() {
     }, [])
     return (
         <>
+
+        <RegisterTaskDialog  openDialog={openCreateTask} onHandleClose={onOpenCloseCreateTaskDialog} onSubmit={onCreateTask}></RegisterTaskDialog>
         <ButtonEndContainer>
-            <Typography  onClick={openCreateTaskDialog} variant="h6">Create Task</Typography><AddBoxIcon onClick={openCreateTaskDialog} fontSize="large"></AddBoxIcon>
+            <Typography  onClick={onOpenCloseCreateTaskDialog} variant="h6">Create Task</Typography><AddBoxIcon onClick={onOpenCloseCreateTaskDialog} fontSize="large"></AddBoxIcon>
         </ButtonEndContainer>
-            {
-                isEditing?
-                <EditCard onCancel={onCancelEdit} onSubmitParent={onEditTask}></EditCard>
-                :
-                <div>
-                    <BasicCard onEdit={onOpenEdit}></BasicCard>
-                </div>
-            }
+        {
+            fakeData.map(task => {
+                if (isEditing) {
+                    return (
+                        <EditCard onCancel={onCancelEdit} onSubmitParent={onEditTask}></EditCard>
+                    )
+                }
+
+                return (
+                    <div>
+                        <BasicCard
+                        key={task.id}
+                        id={task.id}
+                        description={task.description}
+                        status={task.status}
+                        title={task.name}
+                        onEdit={onOpenEdit}
+                        onDelete={ondDeleteTask}
+                        ></BasicCard>
+                    </div>
+                )
+            })
+        }
         </>
     )
 }

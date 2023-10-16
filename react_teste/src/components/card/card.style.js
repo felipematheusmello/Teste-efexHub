@@ -10,7 +10,7 @@ export const ContainerCardAlignCenter = styled.div`
 export const EditIconAlignEnd = styled.div`
     display: flex;
     flex-flow: wrap row;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
 `
 
@@ -20,3 +20,7 @@ export const HoverDiv = styled.div`
         opacity: 0.8;
     }
 `;
+
+export const Title = styled.div`
+    margin-right: auto;
+`
