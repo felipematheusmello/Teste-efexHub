@@ -43,10 +43,10 @@ function Register() {
     }, [registerAccount]);
 
     useEffect(() => {
-        console.log(registerAccountState, error)
         if (!error && registerAccountState) {
             navigate('/login')
         }
+        setRegisterAccountState(false);
     }, [registerAccountState, dispatch ])
     return (
     <>
