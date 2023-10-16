@@ -5,27 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { listTasks, createTask, deleteTask } from "../../redux/actions/task-action";
 import BasicCard from "../../components/card/card";
 import AddBoxIcon from '@mui/icons-material/AddBox';
-import EditCard from "../../components/card/edit-card/edit-card";
 import { ButtonEndContainer } from "./home-style";
 import { Typography } from "@mui/material";
 import RegisterTaskDialog from "../../components/card/register-card/register-card";
 
 
-const fakeData = [{ id: 2, name: "Meu teste", description: "test", status:"false"}]
+const fakeData = [{ id: 2, name: "Meu teste", description: "test", status:"false"}, { id: 3, name: "Meu teste2", description: "test2", status:"false"}]
 function Home() {
-    const [isEditing, setIsEditing] = useState(false)
     const [openCreateTask, setOpenCreateTask] = useState(false)
     const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const {tasks} = useSelector(state => state.task)
-
-    const onOpenEdit = () => {
-        setIsEditing(true)
-    }
-
-    const onCancelEdit = () => {
-        setIsEditing(false)
-    }
 
     const ondDeleteTask = (id) => {
         console.log('teste')
@@ -42,9 +30,11 @@ function Home() {
         dispatch(createTask(event))
     }
 
-    const onEditTask = (task) => {
+    const onTaskEdit = (task) => {
         console.log(task)
+        task.edit = !task.edit
     }
+
     useEffect(() => {
         dispatch(listTasks())
     }, [])
@@ -57,21 +47,12 @@ function Home() {
         </ButtonEndContainer>
         {
             fakeData.map(task => {
-                if (isEditing) {
-                    return (
-                        <EditCard onCancel={onCancelEdit} onSubmitParent={onEditTask}></EditCard>
-                    )
-                }
-
                 return (
                     <div>
                         <BasicCard
                         key={task.id}
-                        id={task.id}
-                        description={task.description}
-                        status={task.status}
-                        title={task.name}
-                        onEdit={onOpenEdit}
+                        task={task}
+                        taskEdit={onTaskEdit}
                         onDelete={ondDeleteTask}
                         ></BasicCard>
                     </div>

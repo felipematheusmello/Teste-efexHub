@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -7,41 +7,58 @@ import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 import ConfirmTaskDialog from '../confirm/confirm-dialog';
 import { useDispatch } from 'react-redux';
 import { deleteTask } from '../../redux/actions/task-action';
+import EditCard from './edit-card/edit-card';
 
 
-function BasicCard({id=0, title='test', description='test', status=true, onEdit= () => {}}) {
+function BasicCard({task={}, taskEdit = () => {}}) {
+    const [edit, setEdit] = useState()
     const dispatch = useDispatch()
 
     const onDelete = () => {
-        console.log('onDelete')
-        dispatch(deleteTask(id))
+        dispatch(deleteTask(task.id))
     }
+
+    const setEditTask = () => {
+        setEdit(!edit)
+    }
+
     return (
-    <ContainerCardAlignCenter key={id}>
-        <Card sx={{ minWidth: 275, mb: 2.3 }}>
-        <CardContent>
-            <Typography variant="h5" component="div">
-                <EditIconAlignEnd>
-                    <Title>
-                        {title}
-                    </Title>
-                    <HoverDiv onClick={onEdit}>
-                        <CreateOutlinedIcon sx={{mr: 1}} ontSize="medium"></CreateOutlinedIcon>
-                    </HoverDiv>
-                    <HoverDiv>
-                        <ConfirmTaskDialog onConfirmDialog={onDelete}>Delete Task</ConfirmTaskDialog>
-                    </HoverDiv>
-                </EditIconAlignEnd>
-            </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            {description}
-            </Typography>
-            <Typography variant="body2">
-            { status ? '🟢 Completed Task': '🟡 In Progress'}
-            </Typography>
-        </CardContent>
-        </Card>
-    </ContainerCardAlignCenter>
+    <>
+        {
+        !edit?
+        <ContainerCardAlignCenter key={task.id}>
+            <Card sx={{ minWidth: 275, mb: 2.3 }}>
+            <CardContent>
+                <Typography variant="h5" component="div">
+                    <EditIconAlignEnd>
+                        <Title>
+                            {task.name}
+                        </Title>
+                        <HoverDiv onClick={setEditTask}>
+                            <CreateOutlinedIcon sx={{mr: 1}} ontSize="medium"></CreateOutlinedIcon>
+                        </HoverDiv>
+                        <HoverDiv>
+                            <ConfirmTaskDialog onConfirmDialog={onDelete}>Delete Task</ConfirmTaskDialog>
+                        </HoverDiv>
+                    </EditIconAlignEnd>
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                {task.description}
+                </Typography>
+                <Typography variant="body2">
+                { task.status ? '🟢 Completed Task': '🟡 In Progress'}
+                </Typography>
+            </CardContent>
+            </Card>
+        </ContainerCardAlignCenter>
+        :
+        <EditCard
+        key={task.id}
+        task={task}
+        onCancel={setEditTask}
+        ></EditCard>
+        }
+    </>
   );
 }
 

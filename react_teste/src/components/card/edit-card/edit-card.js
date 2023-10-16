@@ -12,21 +12,20 @@ import { updateTask } from '../../../redux/actions/task-action';
 import { ContainerCardAlignCenter } from '../card.style';
 
 
-function EditCard({ id=4, title='test', description='test', status=true, onSubmitParent = () => {}, onCancel = () => {} }) {
+function EditCard({ task={}, onCancel = () => {} }) {
     const {register, handleSubmit, control} = useForm({
     defaultValues: {
-        name: title,
-        description: description,
-        status: status,
+        name: task.name,
+        description: task.description,
+        status: task.status,
     }
   })
 
   const dispatch = useDispatch()
 
   const onEditCard = (event) => {
-    onSubmitParent(event)
 
-    dispatch(updateTask(id, event))
+    dispatch(updateTask(task.id, event))
   }
 
   return (
@@ -66,7 +65,7 @@ function EditCard({ id=4, title='test', description='test', status=true, onSubmi
             <Controller
                 name="status"
                 control={control}
-                defaultValue={status}
+                defaultValue={task.status}
                 render={({ field }) => (
                     <RadioGroup
                     row
