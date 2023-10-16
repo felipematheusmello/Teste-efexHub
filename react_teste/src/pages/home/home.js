@@ -17,7 +17,6 @@ function Home() {
     const {tasks} = useSelector(state => state.task)
 
     const onOpenEdit = () => {
-        console.log('opendining edit')
         setIsEditing(true)
     }
 
@@ -26,6 +25,7 @@ function Home() {
     }
 
     const openCreateTaskDialog = () => {
+        console.log('open')
         setOpenCreateTask(true)
     }
 
