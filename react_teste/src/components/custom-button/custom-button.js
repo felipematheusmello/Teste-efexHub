@@ -3,12 +3,12 @@ import { Button, buttonClasses } from '@mui/base/Button';
 import { styled } from '@mui/system';
 import Stack from '@mui/material/Stack';
 
-export default function SimpleCustomButton({ isVisible, children, onClickButton}) {
+export default function SimpleCustomButton({ isVisible, children, onClickButton, callback}) {
   return (
     <Stack spacing={1} direction="row">
         {
             isVisible ?
-            <CustomButton onClick={onClickButton}>{children}</CustomButton>
+            <CustomButton onClick={callback? onClickButton(callback): onClickButton}>{children}</CustomButton>
             :
             <CustomButton disabled>{children}</CustomButton>
         }
