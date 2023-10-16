@@ -10,7 +10,7 @@ import { deleteTask } from '../../redux/actions/task-action';
 import EditCard from './edit-card/edit-card';
 
 
-function BasicCard({task={}, taskEdit = () => {}}) {
+function BasicCard({task={}}) {
     const [edit, setEdit] = useState()
     const dispatch = useDispatch()
 
@@ -35,7 +35,7 @@ function BasicCard({task={}, taskEdit = () => {}}) {
                             {task.name}
                         </Title>
                         <HoverDiv onClick={setEditTask}>
-                            <CreateOutlinedIcon sx={{mr: 1}} ontSize="medium"></CreateOutlinedIcon>
+                            <CreateOutlinedIcon sx={{mr: 1}} fontSize="medium"></CreateOutlinedIcon>
                         </HoverDiv>
                         <HoverDiv>
                             <ConfirmTaskDialog onConfirmDialog={onDelete}>Delete Task</ConfirmTaskDialog>

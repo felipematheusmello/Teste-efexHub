@@ -89,7 +89,10 @@ function RegisterTaskDialog({openDialog, onHandleClose = () => {}, onSubmit = ()
           </DialogContent>
           <DialogActions>
             <Button onClick={onHandleClose}>Cancel</Button>
-            <Button onClick={handleSubmit(onSubmit)}
+            <Button onClick={() =>{
+                handleSubmit(onSubmit)();
+                onHandleClose();
+            }}
             >Create</Button>
           </DialogActions>
         </Dialog>

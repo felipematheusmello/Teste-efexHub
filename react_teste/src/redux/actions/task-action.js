@@ -1,5 +1,6 @@
 import api from '../../api';
 import { TASK_CREATE, TASK_ERROR, TASK_LIST, TASK_REMOVE, TASK_UPDATE } from './action-type';
+import { refreshAndCheckAuthToken } from './auth-action';
 
 export const createTask = (taskData) => {
   return async (dispatch) => {
@@ -12,6 +13,11 @@ export const createTask = (taskData) => {
         payload: newTask,
       });
     } catch (error) {
+
+        if (error.response.status === 401) {
+          dispatch(refreshAndCheckAuthToken())
+        }
+
         dispatch({
             type: TASK_ERROR,
             payload: error,
@@ -32,7 +38,9 @@ export const listTasks = () => {
         payload: tasks,
       });
     } catch (error) {
-        console.log(error);
+        if (error.response.status === 401) {
+          dispatch(refreshAndCheckAuthToken())
+        }
         dispatch({
             type: TASK_ERROR,
             payload: error,
@@ -45,13 +53,16 @@ export const listTasks = () => {
 export const deleteTask = (taskId) => {
     return async (dispatch) => {
       try {
-        await api.delete(`task/${taskId}`);
+        await api.delete(`task`, {params: { id:taskId }}) ;
 
         dispatch({
           type: TASK_REMOVE,
           payload: taskId,
         });
       } catch (error) {
+        if (error.response.status === 401) {
+          dispatch(refreshAndCheckAuthToken())
+        }
         dispatch({
             type: TASK_ERROR,
             payload: error,
@@ -64,7 +75,7 @@ export const deleteTask = (taskId) => {
   export const updateTask = (taskId, updatedTaskData) => {
     return async (dispatch) => {
       try {
-        const response = await api.put(`task/${taskId}`, updatedTaskData);
+        const response = await api.put(`task`, { ...updatedTaskData, id: taskId });
         const updatedTask = response.data;
 
         dispatch({
@@ -72,6 +83,9 @@ export const deleteTask = (taskId) => {
           payload: updatedTask,
         });
       } catch (error) {
+        if (error.response.status === 401) {
+          dispatch(refreshAndCheckAuthToken())
+        }
         dispatch({
             type: TASK_ERROR,
             payload: error,

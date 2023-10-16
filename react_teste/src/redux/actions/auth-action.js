@@ -12,7 +12,6 @@ export const login = (userData) => {
       .post(`${baseUri}login`, userData)
       .then((response) => {
         dispatch({ type: LOGIN_SUCCESS, user: response.data });
-        console.log(response.data)
         localStorage.setItem('access_token', response.data.access_token)
         localStorage.setItem('refresh_token', response.data.refresh_token)
 

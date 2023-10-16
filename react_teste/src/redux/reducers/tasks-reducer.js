@@ -11,13 +11,14 @@ const tasksReducer = (state = initialState, action) => {
 
         case TASK_UPDATE:
             const updatedTask = action.payload
-            const updatedTasks = state.tasks.map((task) => {
-                if(updatedTask.id === task.id) {
-                    return {...task, updatedTask}
+            const newTaskList = state.tasks.map((task) => {
+                if (task.id === updatedTask.id) {
+                    return updatedTask
                 }
+
                 return task
             })
-            return updatedTasks;
+            return {...state, tasks: newTaskList};
 
         case TASK_REMOVE:
             const id = action.payload

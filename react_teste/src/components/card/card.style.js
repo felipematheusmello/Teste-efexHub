@@ -5,6 +5,7 @@ export const ContainerCardAlignCenter = styled.div`
     flex-flow: wrap row;
     justify-content: start;
     align-items: center;
+    width: 100%;
 `
 
 export const EditIconAlignEnd = styled.div`

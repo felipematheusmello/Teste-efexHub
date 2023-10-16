@@ -8,7 +8,7 @@ import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutli
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import { ButtonContainer, HoverDiv } from './edit-card-style';
 import { useDispatch } from 'react-redux';
-import { updateTask } from '../../../redux/actions/task-action';
+import { listTasks, updateTask } from '../../../redux/actions/task-action';
 import { ContainerCardAlignCenter } from '../card.style';
 
 
@@ -26,6 +26,9 @@ function EditCard({ task={}, onCancel = () => {} }) {
   const onEditCard = (event) => {
 
     dispatch(updateTask(task.id, event))
+    dispatch(listTasks())
+
+    onCancel()
   }
 
   return (
